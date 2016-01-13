@@ -166,8 +166,8 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     {
         $headerSize = $this->getHeaderSize();
 
-        $rawHeaders = mb_substr($this->rawResponse, 0, $headerSize);
-        $rawBody = mb_substr($this->rawResponse, $headerSize);
+        $rawHeaders = substr($this->rawResponse, 0, $headerSize);
+        $rawBody = substr($this->rawResponse, $headerSize);
 
         return [trim($rawHeaders), trim($rawBody)];
     }
@@ -185,9 +185,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
         if ($this->needsCurlProxyFix()) {
             // Additional way to calculate the request body size.
             if (preg_match('/Content-Length: (\d+)/', $this->rawResponse, $m)) {
-                $headerSize = mb_strlen($this->rawResponse) - $m[1];
+                $headerSize = strlen($this->rawResponse) - $m[1];
             } elseif (stripos($this->rawResponse, self::CONNECTION_ESTABLISHED) !== false) {
-                $headerSize += mb_strlen(self::CONNECTION_ESTABLISHED);
+                $headerSize += strlen(self::CONNECTION_ESTABLISHED);
             }
         }
 
@@ -205,6 +205,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
         $ver = $this->facebookCurl->version();
         $version = $ver['version_number'];
 
+       
         return $version < self::CURL_PROXY_QUIRK_VER;
     }
 }
